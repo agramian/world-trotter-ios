@@ -8,6 +8,21 @@
 
 import UIKit
 
+extension CGFloat {
+    static func random() -> CGFloat {
+        return CGFloat(arc4random()) / CGFloat(UInt32.max)
+    }
+}
+
+extension UIColor {
+    static func random() -> UIColor {
+        return UIColor(red:   .random(),
+                       green: .random(),
+                       blue:  .random(),
+                       alpha: 1.0)
+    }
+}
+
 class ConversionViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var celsiusLabel: UILabel!
@@ -27,8 +42,17 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    
+        print("ConversionViewController loaded its view.")
         
         updateCelsiusLabel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.view.backgroundColor = UIColor(red:   .random(),
+                                            green: .random(),
+                                            blue:  .random(),
+                                            alpha: 1.0);
     }
     
     @IBAction func fahrenheitFieldEditingChanged(_ textField: UITextField) {
