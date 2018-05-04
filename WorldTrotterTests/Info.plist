@@ -16,6 +16,10 @@
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Program requires GPS to track current user&apos;s location</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Program requires GPS to track current user&apos;s location</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 </dict>

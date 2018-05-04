@@ -94,10 +94,6 @@
         <scene sceneID="fav-bR-nZC">
             <objects>
                 <viewController id="Ce3-Bf-Vu5" customClass="MapViewController" customModule="WorldTrotter" customModuleProvider="target" sceneMemberID="viewController">
-                    <mapView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" id="Zvd-Tq-Eex">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </mapView>
                     <tabBarItem key="tabBarItem" title="Map" image="MapIcon" id="cty-0t-3OR"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fvP-4g-ZUH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -116,11 +112,28 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="w3e-Ld-qfH"/>
                         <segue destination="Ce3-Bf-Vu5" kind="relationship" relationship="viewControllers" id="wH2-Eg-6vk"/>
+                        <segue destination="YI3-pr-hF8" kind="relationship" relationship="viewControllers" id="knU-sp-lOP"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5cq-Xi-DLd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-211.19999999999999" y="37.781109445277366"/>
+        </scene>
+        <!--Web-->
+        <scene sceneID="pRg-8R-hx3">
+            <objects>
+                <viewController id="YI3-pr-hF8" customClass="WebViewController" customModule="WorldTrotter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NHU-6i-bjN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <viewLayoutGuide key="safeArea" id="nuA-LT-Clt"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Web" id="bvc-lz-yF9"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fei-xO-y5f" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-248" y="423"/>
         </scene>
     </scenes>
     <resources>
