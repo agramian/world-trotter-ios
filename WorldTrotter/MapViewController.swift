@@ -14,6 +14,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var mapView: MKMapView!
     var locationManager = CLLocationManager()
     let myLocationButton = UIButton()
+    let cyclePinLocationsButton = UIButton()
+    var pinLocationsArray: [MKPointAnnotation] = []
+    var pinLocation = 0
     
     override func loadView() {
         // Create a map view
@@ -23,6 +26,31 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         // Set it as *the* view of this view controller
         view = mapView
         
+        // create and add birth location pin
+        let birthLocationAnnotation = MKPointAnnotation()
+        birthLocationAnnotation.title = "Place of birth"
+        birthLocationAnnotation.coordinate = CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437)
+        birthLocationAnnotation.subtitle = "Los Angeles, CA"
+        pinLocationsArray.append(birthLocationAnnotation)
+        
+        // create and add current location pin
+        let currentLocationAnnotation = MKPointAnnotation()
+        currentLocationAnnotation.title = "Current residence"
+        currentLocationAnnotation.coordinate = CLLocationCoordinate2D(latitude: 37.8044, longitude: -122.2711)
+        currentLocationAnnotation.subtitle = "Oakland, CA"
+        pinLocationsArray.append(currentLocationAnnotation)
+    
+        // create and add interesting location pin
+        let interestingLocationAnnotation = MKPointAnnotation()
+        interestingLocationAnnotation.title = "Interesting location visited"
+        interestingLocationAnnotation.coordinate = CLLocationCoordinate2D(latitude: 42.8047, longitude: 140.6875)
+        interestingLocationAnnotation.subtitle = "Niseko, Hokkaido, Japan"
+        pinLocationsArray.append(interestingLocationAnnotation)
+        
+        // add annotations to map view
+        mapView.addAnnotations(pinLocationsArray)
+    
+        // add segmented map control widget
         let segmentedControl = UISegmentedControl(items: ["Standard", "Hybrid", "Satellite"])
         segmentedControl.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         segmentedControl.selectedSegmentIndex = 0
@@ -42,7 +70,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         leadingConstraint.isActive = true
         trailingConstraint.isActive = true
         
-        
+        // create and add my location button
         myLocationButton.backgroundColor = .blue
         myLocationButton.setTitle("My Location", for: .normal)
         myLocationButton.sizeToFit()
@@ -50,12 +78,29 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
         self.view.addSubview(myLocationButton)
         
-        let buttonTopConstraint = myLocationButton.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8)
-        let buttonLeadingConstraint = myLocationButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
-        let buttonTrailingConstraint = myLocationButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
-        buttonTopConstraint.isActive = true
-        buttonLeadingConstraint.isActive = true
-        buttonTrailingConstraint.isActive = true
+        let myLocationButtonTopConstraint = myLocationButton.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8)
+        let myLocationButtonLeadingConstraint = myLocationButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
+        let myLocationButtonTrailingConstraint = myLocationButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        myLocationButtonTopConstraint.isActive = true
+        myLocationButtonLeadingConstraint.isActive = true
+        myLocationButtonTrailingConstraint.isActive = true
+        
+        // create and add cycle pin locations button
+        cyclePinLocationsButton.backgroundColor = .red
+        cyclePinLocationsButton.setTitle("Cycle Pin Locations", for: .normal)
+        cyclePinLocationsButton.sizeToFit()
+        cyclePinLocationsButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.view.addSubview(cyclePinLocationsButton)
+        
+        let cyclePinLocationsButtonTopConstraint = cyclePinLocationsButton.topAnchor.constraint(equalTo: myLocationButton.bottomAnchor, constant: 8)
+        let cyclePinLocationsButtonLeadingConstraint = cyclePinLocationsButton.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
+        let cyclePinLocationsButtonTrailingConstraint = cyclePinLocationsButton.trailingAnchor.constraint(equalTo: margins.trailingAnchor)
+        cyclePinLocationsButtonTopConstraint.isActive = true
+        cyclePinLocationsButtonLeadingConstraint.isActive = true
+        cyclePinLocationsButtonTrailingConstraint.isActive = true
+        
+        cyclePinLocationsButton.addTarget(self, action: #selector(onCyclePinLocations(_:)), for: .touchUpInside)
     }
 
     override func viewDidLoad() {
@@ -63,13 +108,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         mapView.showsUserLocation = true
         
-        //Check for Location Services
+        // Check for Location Services
         if (CLLocationManager.locationServicesEnabled()) {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.requestAlwaysAuthorization()
             locationManager.requestWhenInUseAuthorization()
-            //locationManager.startUpdatingLocation()
             myLocationButton.addTarget(self, action: #selector(onMyLocation(_:)), for: .touchUpInside)
         }
     
@@ -93,6 +137,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         locationManager.requestLocation()
     }
     
+    @objc func onCyclePinLocations(_ button: UIButton) {
+        // Zoom to pin location
+        mapView.setRegion(MKCoordinateRegionMakeWithDistance(pinLocationsArray[pinLocation].coordinate, 10000, 10000), animated: true)
+        print("zoom to pin location = \(pinLocationsArray[pinLocation])")
+        pinLocation += 1
+        if pinLocation >= pinLocationsArray.count {
+            pinLocation = 0
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         //Zoom to user location
@@ -112,4 +166,25 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         print("MapViewController did stop locating user.")
     }
 
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            //return nil so map view draws "blue dot" for standard user location
+            return nil
+        }
+        
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.animatesDrop = true
+            pinView!.pinTintColor = .red
+        } else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
+    
 }
