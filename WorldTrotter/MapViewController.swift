@@ -28,21 +28,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // create and add birth location pin
         let birthLocationAnnotation = MKPointAnnotation()
-        birthLocationAnnotation.title = "Place of birth"
+        birthLocationAnnotation.title = NSLocalizedString("Place of birth", comment: "")
         birthLocationAnnotation.coordinate = CLLocationCoordinate2D(latitude: 34.0522, longitude: -118.2437)
         birthLocationAnnotation.subtitle = "Los Angeles, CA"
         pinLocationsArray.append(birthLocationAnnotation)
         
         // create and add current location pin
         let currentLocationAnnotation = MKPointAnnotation()
-        currentLocationAnnotation.title = "Current residence"
+        currentLocationAnnotation.title = NSLocalizedString("Current residence", comment: "")
         currentLocationAnnotation.coordinate = CLLocationCoordinate2D(latitude: 37.8044, longitude: -122.2711)
         currentLocationAnnotation.subtitle = "Oakland, CA"
         pinLocationsArray.append(currentLocationAnnotation)
     
         // create and add interesting location pin
         let interestingLocationAnnotation = MKPointAnnotation()
-        interestingLocationAnnotation.title = "Interesting location visited"
+        interestingLocationAnnotation.title = NSLocalizedString("Interesting location visited", comment: "")
         interestingLocationAnnotation.coordinate = CLLocationCoordinate2D(latitude: 42.8047, longitude: 140.6875)
         interestingLocationAnnotation.subtitle = "Niseko, Hokkaido, Japan"
         pinLocationsArray.append(interestingLocationAnnotation)
@@ -51,7 +51,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         mapView.addAnnotations(pinLocationsArray)
     
         // add segmented map control widget
-        let segmentedControl = UISegmentedControl(items: ["Standard", "Hybrid", "Satellite"])
+        let segmentedControl = UISegmentedControl(items: [NSLocalizedString("Standard", comment: ""), NSLocalizedString("Hybrid", comment: ""), NSLocalizedString("Satellite", comment: "")])
         segmentedControl.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         segmentedControl.selectedSegmentIndex = 0
         
@@ -60,7 +60,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(segmentedControl)
         
-        let topConstraint = segmentedControl.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 8)
+        let topConstraint = segmentedControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8)
         
         let margins = view.layoutMarginsGuide
         let leadingConstraint = segmentedControl.leadingAnchor.constraint(equalTo: margins.leadingAnchor)
@@ -72,7 +72,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // create and add my location button
         myLocationButton.backgroundColor = .blue
-        myLocationButton.setTitle("My Location", for: .normal)
+        myLocationButton.setTitle(NSLocalizedString("My Location", comment: ""), for: .normal)
         myLocationButton.sizeToFit()
         myLocationButton.translatesAutoresizingMaskIntoConstraints = false
     
@@ -87,7 +87,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         // create and add cycle pin locations button
         cyclePinLocationsButton.backgroundColor = .red
-        cyclePinLocationsButton.setTitle("Cycle Pin Locations", for: .normal)
+        cyclePinLocationsButton.setTitle(NSLocalizedString("Cycle Pin Locations", comment: ""), for: .normal)
         cyclePinLocationsButton.sizeToFit()
         cyclePinLocationsButton.translatesAutoresizingMaskIntoConstraints = false
         
